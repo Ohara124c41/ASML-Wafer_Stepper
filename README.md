@@ -1,5 +1,5 @@
-# ASML-Wafer_Stepper
-This project was for a course at TU/e called System Validation. The goal is to create an architecture with parallel components and use formal model checking to evaluate the model. It is strongly advised for students following this course at TU/e to look away now. Any attempt to implement similar mu-calculus formulae will most definitely be caught and punished.
+# ASML-Wafer Stepper
+This project was for a course at TU/e called System Validation. The goal is to create an architecture with parallel components and use formal model checking to evaluate the model. It is strongly advised for students following this course at TU/e to ***look away now***. Any attempt to implement similar mu-calculus formulae or requirements will most definitely be caught and punished.
 
 ![image1](https://github.com/Ohara124c41/ASML-Wafer_Stepper/blob/master/images/2IMF30_System_Validation-01.jpg?raw=true)
 ![image2](https://github.com/Ohara124c41/ASML-Wafer_Stepper/blob/master/images/2IMF30_System_Validation-02.jpg?raw=true)
