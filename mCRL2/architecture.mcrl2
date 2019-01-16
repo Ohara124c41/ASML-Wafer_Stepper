@@ -1,0 +1,402 @@
+sort
+	Chamber		= struct cI | cO | cL | cH;
+	Pressure	= struct pA | pL | pH;
+	Door		= struct dAI| dAO| dLI| dLO| dH;
+	Robot		= struct rI | rO | rT;
+	DoorState	= struct sO | sC;
+	Action		= struct aG | aR;
+
+map
+	d2p:	Door -> Pressure;			% get the required pressure the chamber connected to door
+	d2c:	Door -> Chamber;			% get the chamber that has to be at the correct pressure
+	cr2d:	Chamber # Robot -> Door;	% get the door to a chamber that a robot needs to go to
+	ra2c:	Robot # Action -> Chamber;	% get the chamber that matches a robot / action combination
+var
+	door: Door;
+
+eqn
+	d2p(dAI) = pA;
+	d2p(dAO) = pA;
+	d2p(dLI) = pL;
+	d2p(dLO) = pL;
+	d2p(dH ) = pH;
+
+	d2c(dAI) = cI;
+	d2c(dAO) = cO;
+	d2c(dLI) = cI;
+	d2c(dLO) = cO;
+	d2c(dH ) = cL;
+
+	cr2d(cI, rT) = dAI;
+	cr2d(cO, rT) = dAO;
+	cr2d(cI, rI) = dLI;
+	cr2d(cO, rO) = dLO;
+	cr2d(cH, rI) = dH;
+	cr2d(cH, rO) = dH;
+
+	cr2d(cL, rO) = dLO;
+	cr2d(cI, rO) = dLI;
+	cr2d(cL, rI) = dLI;
+	cr2d(cH, rT) = dH;
+	cr2d(cL, rT) = dLI;
+	cr2d(cO, rI) = dLO;
+
+	ra2c(rT, aG) = cO;
+	ra2c(rT, aR) = cI;
+	ra2c(rO, aR) = cO;
+	ra2c(rO, aG) = cH;
+	ra2c(rI, aR) = cH;
+	ra2c(rI, aG) = cI;
+
+act
+
+	% External Actions
+	wafer_in;
+	project_wafer;
+	wafer_out;
+	system_finished;
+	invalid_pressure;
+	instruct_door: Door # DoorState;
+	set_pressure: Chamber # Pressure;
+	instruct_robot: Robot # Chamber # Action;
+
+	% Communication Actions (s = send, r = receive, c = communicate)
+	s_wafer_in,  r_wafer_in;
+	s_wafer_out, r_wafer_out;
+
+	s_door_request,			r_door_request,			c_door_request:			Door # DoorState;
+	s_door_confirmed,		r_door_confirmed,		c_door_confirmed:		Door # DoorState;
+	s_door_release, 		r_door_release, 		c_door_release: 		Door # DoorState;
+
+	s_pressure_request, 	r_pressure_request,		c_pressure_request:		Chamber # Pressure;
+	s_pressure_confirmed,	r_pressure_confirmed,	c_pressure_confirmed:	Chamber # Pressure;
+	s_pressure_release, 	r_pressure_release,		c_pressure_release:		Chamber # Pressure;
+
+	s_path_request,			r_path_request,			c_path_request: 		Nat;
+	s_path_release,			r_path_release,			c_path_release: 		Nat;
+
+	s_move_request, 		r_move_request,			c_move_request:			Robot # Chamber # Action;
+	s_move_confirmed, 		r_move_confirmed,		c_move_confirmed:		Robot # Chamber # Action;
+
+proc
+	doorController(d:Door, ds:DoorState) = (
+	% The door controller is responsible for opening and closing the doors while maintaining the desired vacuum state for each chamber.
+		sum ds':DoorState . (
+			r_door_request(d, ds') . (
+				(ds != ds') -> (
+					((ds' == sO) -> (
+						(d == dAI) -> (
+							s_pressure_request(cI, pA) . (
+								r_pressure_confirmed(cI, pA) +
+
+								r_door_request(dAI, sC) . instruct_door(dAI, sC) .
+								s_door_confirmed(dAI, sC) . r_pressure_confirmed(cI, pA) . r_door_release(dAI, sC)
+							) .
+
+							instruct_door(d, ds') . s_door_confirmed(d, ds') .
+							r_door_release(d, ds') .
+							s_pressure_release(cI, pA)
+						) +
+
+						(d == dAO) -> (
+							s_pressure_request(cO, pA) . (
+								r_pressure_confirmed(cO, pA) +
+
+								r_door_request(dAO, sC) . instruct_door(dAO, sC) .
+								s_door_confirmed(dAO, sC) . r_pressure_confirmed(cO, pA) . r_door_release(dAO, sC)
+							) .
+
+							instruct_door(d, ds') . s_door_confirmed(d, ds') .
+							r_door_release(d, ds') .
+							s_pressure_release(cO, pA)
+						) +
+
+						(d == dLI) -> (
+							s_pressure_request(cL, pL) . (
+								r_pressure_confirmed(cL, pL) +
+
+								r_door_request(dLI, sC) . instruct_door(dLI, sC) .
+								s_door_confirmed(dLI, sC) . r_pressure_confirmed(cL, pL) . r_door_release(dLI, sC)
+							) .
+
+							s_pressure_request(cI, pL) . (
+								r_pressure_confirmed(cI, pL) +
+
+								r_door_request(dLI, sC) . instruct_door(dLI, sC) .
+								s_door_confirmed(dLI, sC) . r_pressure_confirmed(cI, pL) . r_door_release(dLI, sC)
+							) .
+
+							instruct_door(d, ds') . s_door_confirmed(d, ds') .
+							r_door_release(d, ds') .
+							s_pressure_release(cL, pL) . s_pressure_release(cI, pL)
+						) +
+
+						(d == dLO) -> (
+							s_pressure_request(cL, pL) . (
+								r_pressure_confirmed(cL, pL) +
+
+								r_door_request(dLO, sC) . instruct_door(dLO, sC) .
+								s_door_confirmed(dLO, sC) . r_pressure_confirmed(cL, pL) . r_door_release(dLO, sC)
+							) .
+
+							s_pressure_request(cO, pL) . (
+								r_pressure_confirmed(cO, pL) +
+
+								r_door_request(dLO, sC) . instruct_door(dLO, sC) .
+								s_door_confirmed(dLO, sC) . r_pressure_confirmed(cO, pL) . r_door_release(dLO, sC)
+							) .
+
+							instruct_door(d, ds') . s_door_confirmed(d, ds') .
+							r_door_release(d, ds') .
+							s_pressure_release(cL, pL) . s_pressure_release(cO, pL)
+						) +
+
+						(d == dH) -> (
+							s_pressure_request(cL, pH) . (
+								r_pressure_confirmed(cL, pH) +
+
+								r_door_request(dH, sC) . instruct_door(dH, sC) .
+								s_door_confirmed(dH, sC) . r_pressure_confirmed(cL, pH) . r_door_release(dH, sC)
+							) .
+
+							s_pressure_request(cH, pH) . (
+								r_pressure_confirmed(cH, pH)
+							) .
+
+							instruct_door(d, ds') . s_door_confirmed(d, ds') .
+							r_door_release(d, ds') .
+							s_pressure_release(cL, pH) . s_pressure_release(cH, pH)
+						)
+					) <> (
+						instruct_door(d, ds') . s_door_confirmed(d, ds') .
+						r_door_release(d, ds')
+					))
+				) <> (
+					instruct_door(d, ds') . s_door_confirmed(d, ds') .
+					r_door_release(d, ds')
+				)
+			) . doorController(d, ds')
+		)
+	);
+
+	pressureController(c:Chamber, p:Pressure) = (
+	% For each chamber a pressure controller exists.
+	% It receives a r_pressure_request(c, p').
+	% It will do the necessary steps to reach an s_pressure_confirmed(c, p')
+	% (close doors, wait for confirmation of doors) then it will wait for a
+	% r_pressure_release(c, p'), after which it releases the doors and repeats
+	% with the new pressure.
+
+		(c == cI) -> (sum p':Pressure .
+			r_pressure_request(c, p') . ((p' == p) -> (
+				set_pressure(c, p') . s_pressure_confirmed(c, p') . r_pressure_release(c, p') .
+				pressureController(c, p')
+			) <> (
+				(p' == pH) -> (invalid_pressure) <> (
+					s_door_request(dLI, sC) . s_door_request(dAI, sC) .
+					r_door_confirmed(dLI, sC) . r_door_confirmed(dAI, sC) .
+					set_pressure(c, p') . s_pressure_confirmed(c, p') .
+					s_door_release(dLI, sC) . s_door_release(dAI, sC) .
+					r_pressure_release(c, p') .
+					pressureController(c, p')
+				)
+			))
+		) +
+
+		(c == cO) -> (sum p':Pressure .
+			r_pressure_request(c, p') . ((p' == p) -> (
+				set_pressure(c, p') . s_pressure_confirmed(c, p') . r_pressure_release(c, p') .
+				pressureController(c, p')
+			) <> (
+				(p' == pH) -> (invalid_pressure) <> (
+					s_door_request(dLO, sC) . s_door_request(dAO, sC) .
+					r_door_confirmed(dLO, sC) . r_door_confirmed(dAO, sC) .
+					set_pressure(c, p') . s_pressure_confirmed(c, p') .
+					s_door_release(dLO, sC) . s_door_release(dAO, sC) .
+					r_pressure_release(c, p') .
+					pressureController(c, p')
+				)
+			))
+		) +
+
+		(c == cL) -> (sum p':Pressure .
+			r_pressure_request(c, p') .
+			((p' == p) -> (
+				set_pressure(c, p') . s_pressure_confirmed(c, p') . r_pressure_release(c, p') .
+				pressureController(c, p')
+			) <> (
+				(p' == pA) -> (invalid_pressure) <> (
+					s_door_request(dLI, sC) . s_door_request(dLO, sC) . s_door_request(dH, sC) .
+					r_door_confirmed(dLI, sC) . r_door_confirmed(dLO, sC) . r_door_confirmed(dH, sC) .
+					set_pressure(c, p') . s_pressure_confirmed(c, p') .
+					s_door_release(dLI, sC) . s_door_release(dLO, sC) . s_door_release(dH, sC) .
+					r_pressure_release(c, p') .
+					pressureController(c, p')
+				)
+			))
+		) +
+
+		(c == cH) -> (sum p':Pressure .
+			r_pressure_request(c, p') . ((p' == p) -> (
+				set_pressure(c, p') . s_pressure_confirmed(c, p') . r_pressure_release(c, p') .
+				pressureController(c, p')
+			) <> (
+				(p' != pH) -> (invalid_pressure) <> (
+					s_door_request(dH, sC) . r_door_confirmed(dH, sC) .
+					set_pressure(c, p') . s_pressure_confirmed(c, p') .
+					s_door_release(dH, sC) . r_pressure_release(c, p') .
+					pressureController(c, p')
+				)
+			))
+		)
+	);
+
+	pathController(n:Nat) = ( %status: Door -> Bool) = (
+	% The path controller is responsible for handling path requests and path releases to prevent wafers from stacking. A path is defined as the section of track on the high-pressure side of a door.
+
+		r_path_request(n) . r_path_release(n) . pathController(n)
+	);
+
+	robotController(r:Robot, a:Action) = (
+	% For each robot a robot controller exists. It has an action which is either Grab (aG) when it has a wafer or Release (aR) when it has no wafer.
+
+		sum a':Action, c:Chamber.(
+			(r == rT && c == cI && a' == aR) ->
+				r_move_request(r, c, a') . s_path_request(1) .
+				Do_Move(r, c, a') + % wafer_in
+			(r == rI && c == cI && a' == aG && a == aR) ->
+				r_move_request(r, c, a') . s_path_request(2) .
+				Do_Move(r, c, a') . s_path_release(1) +
+			(r == rI && c == cH && a' == aR && a == aG) ->
+				r_move_request(r, c, a') . s_path_request(3) .
+				Do_Move(r, c, a') . s_path_release(2) +
+			(r == rO && c == cH && a' == aG && a == aR) ->
+				r_move_request(r, c, a') . s_path_request(4) .
+				Do_Move(r, c, a') . s_path_release(3) +
+			(r == rO && c == cO && a' == aR && a == aG) ->
+				r_move_request(r, c, a') . s_path_request(5) .
+				Do_Move(r, c, a') . s_path_release(4) +
+			(r == rT && c == cO && a' == aG) ->
+				r_move_request(r, c, a') .
+				Do_Move(r, c, a') . s_path_release(5)
+		) . robotController(r, a')
+	);
+
+	Do_Move(r:Robot, c:Chamber, a:Action) = (
+		s_door_request(cr2d(c, r), sO) . r_door_confirmed(cr2d(c, r), sO) .
+		% Actual move
+		instruct_robot(r, c, a) . s_move_confirmed(r, c, a) .
+		s_door_release(cr2d(c, r), sO)
+	);
+
+	waferController(n:Int) = (
+		waferControllerIn(n) || waferControllerOut(n)
+	);
+
+	waferControllerIn(n:Int) = (
+		(n >  0) -> s_wafer_in . waferControllerIn(n-1)
+	);
+
+	waferControllerOut(n:Int) = (
+		(n >  1) -> r_wafer_out . waferControllerOut(n-1) +
+		(n == 1) -> r_wafer_out . (sum d:Door. s_door_request(d, sC) . r_door_confirmed(d, sC) . s_door_release(d, sC)) . % Close all doors after last wafer_out.
+			waferControllerOut(n-1) +
+		(n == 0) -> system_finished . delta
+	);
+
+	transportController = (
+		waferController(6) || waferForwarder || waferForwarder || waferForwarder || waferForwarder || waferForwarder
+	);
+
+	waferForwarder = (
+		r_wafer_in .
+		s_move_request(rT, cI, aR) . r_move_confirmed(rT, cI, aR) .
+		s_move_request(rI, cI, aG) . r_move_confirmed(rI, cI, aG) .
+		s_move_request(rI, cH, aR) . r_move_confirmed(rI, cH, aR) .
+		s_door_request(dH , sC) . r_door_confirmed(dH , sC) . project_wafer . s_door_release(dH , sC) .
+		s_move_request(rO, cH, aG) . r_move_confirmed(rO, cH, aG) .
+		s_move_request(rO, cO, aR) . r_move_confirmed(rO, cO, aR) .
+		s_move_request(rT, cO, aG) . r_move_confirmed(rT, cO, aG) .
+		s_wafer_out .
+		waferForwarder
+	);
+
+init
+
+hide(
+	{
+		invalid_pressure
+	},
+
+	allow(
+		{
+			wafer_in,
+			project_wafer,
+			wafer_out,
+			system_finished,
+			invalid_pressure,
+
+			c_door_request,
+			c_door_confirmed,
+			c_door_release,
+
+			c_pressure_request,
+			c_pressure_confirmed,
+			c_pressure_release,
+
+			c_path_request,
+			c_path_release,
+
+			c_move_request,
+			c_move_confirmed,
+
+			set_pressure,
+			instruct_door,
+			instruct_robot
+		},
+
+		comm(
+			{
+				s_wafer_in				| r_wafer_in		-> wafer_in,
+				s_wafer_out				| r_wafer_out		-> wafer_out,
+
+				s_door_request			| r_door_request	-> c_door_request,
+				s_door_confirmed		| r_door_confirmed	-> c_door_confirmed,
+				s_door_release			| r_door_release	-> c_door_release,
+
+				s_pressure_request 		| r_pressure_request	-> c_pressure_request,
+				s_pressure_confirmed 	| r_pressure_confirmed	-> c_pressure_confirmed,
+				s_pressure_release  	| r_pressure_release -> c_pressure_release,
+
+				s_path_request			| r_path_request	-> c_path_request,
+				s_path_release			| r_path_release	-> c_path_release,
+
+				s_move_request			| r_move_request	-> c_move_request,
+				s_move_confirmed		| r_move_confirmed 	-> c_move_confirmed
+			},
+
+			transportController ||
+
+			doorController(dAI, sC) ||
+			doorController(dAO, sC) ||
+			doorController(dLI, sC) ||
+			doorController(dLO, sC) ||
+			doorController(dH , sC) ||
+
+			pressureController(cI, pA) ||
+			pressureController(cO, pL) ||
+			pressureController(cL, pL) ||
+			pressureController(cH, pH) ||
+
+			pathController(1) ||
+			pathController(2) ||
+			pathController(3) ||
+			pathController(4) ||
+			pathController(5) ||
+
+			robotController(rT, aR) ||
+			robotController(rI, aR) ||
+			robotController(rO, aR)
+		)
+	)
+);

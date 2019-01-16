@@ -1,0 +1,21 @@
+% Requirement:
+%
+%	"There can be only one wafer at a time in each sluice."
+%
+% Description:
+%
+%	An integer value is used to keep track of the number of wafers in a sluice.
+%	Robot actions alternate between grab and release. Since the sluices each
+%	interact with two robots, each sluice must be checked individually.
+
+(nu X (n:Int = 0) . (
+	[instruct_robot(rT, cI, aR)] (val(n<1) && X(n+1)) &&
+	[instruct_robot(rI, cI, aG)] (val(n>0) && X(n-1)) &&
+	[!(instruct_robot(rT, cI, aR) || instruct_robot(rI, cI, aG))] X(n)
+)) &&
+
+(nu X (n:Int = 0) . (
+	[instruct_robot(rO, cO, aR)] (val(n<1) && X(n+1)) &&
+	[instruct_robot(rT, cO, aG)] (val(n>0) && X(n-1)) &&
+	[!(instruct_robot(rT, cO, aG) || instruct_robot(rO, cO, aR))] X(n)
+))

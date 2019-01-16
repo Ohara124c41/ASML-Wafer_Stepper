@@ -1,0 +1,20 @@
+% Requirement:
+%
+%	"Robots cannot be instructed such that they collide."
+%
+% Description:
+%
+%	Only one robot may act each time a door is open. The only location (in the
+%	model) that two robots could potentially collide is at the door of the
+%	high-vacuum chamber. A variable (bH) is used to represent the presence of a
+%	wafer within the high-vacuum chamber. Alternating robot actions and
+%	updating the DoorState when the door closes ensures that robots cannot
+%	collide.
+
+nu X(bH:Bool = false) . (
+	[instruct_door(dH, sO)] X(bH) &&
+	[instruct_door(dH, sC)] X(false) &&
+	(forall r:Robot, a:Action . [instruct_robot(r, cH, a)] (val(bH == false) && X(true))) &&
+	[!exists ds:DoorState, r:Robot, a:Action . (instruct_door(dH, ds) || instruct_robot(r, cH, a))]
+		X(bH)
+)

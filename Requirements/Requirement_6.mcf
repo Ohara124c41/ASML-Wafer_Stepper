@@ -1,0 +1,15 @@
+% Requirement:
+%
+%	"There can be only one wafer at a time in the high-vacuum chamber."
+%
+% Description:
+%
+%	The number of wafers in cH is kept track of with an integer. Since robot
+%	actions alternate, it is not possible to place more than one wafer in the
+%	high-vacuum chamber simultaneously.
+
+(nu X (n:Int = 0) . (
+	[instruct_robot(rI, cL, aR)] (val(n<1) && X(n+1)) &&
+	[instruct_robot(rO, cL, aG)] (val(n>0) && X(n-1)) &&
+	[!(instruct_robot(rI, cL, aR) || instruct_robot(rO, cL, aG))] X(n)
+))

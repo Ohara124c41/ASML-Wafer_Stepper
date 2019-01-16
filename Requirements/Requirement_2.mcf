@@ -1,0 +1,23 @@
+% Requirement:
+%
+%   "Any sluice can have at most one door open at a time."
+%
+% Description:
+%
+%   The instruct_door(d, sO) action must not happen unless the alternative door
+%   within the same chamber is closed. A variable (e.g. S_dAI, S_dAO, etc.) is
+%   used to keep track of the state of the door.
+
+nu X(S_dAI:DoorState = sC, S_dAO:DoorState = sC, S_dLI:DoorState = sC, S_dLO:DoorState = sC) . (
+    (forall ds:DoorState . [instruct_door(dAI, ds)] X(ds, S_dAO, S_dLI, S_dLO)) &&
+    (forall ds:DoorState . [instruct_door(dAO, ds)] X(S_dAI, ds, S_dLI, S_dLO)) &&
+    (forall ds:DoorState . [instruct_door(dLI, ds)] X(S_dAI, S_dAO, ds, S_dLO)) &&
+    (forall ds:DoorState . [instruct_door(dLO, ds)] X(S_dAI, S_dAO, S_dLI, ds)) &&
+	(forall ds:DoorState . [instruct_door(dH , ds)] X(S_dAI, S_dAO, S_dLI, S_dLO)) &&
+    [!exists d:Door, ds:DoorState . instruct_door(d, ds)] X(S_dAI, S_dAO, S_dLI, S_dLO) &&
+
+    [instruct_door(dAI, sO)] val(S_dAO == sC) &&
+    [instruct_door(dAO, sO)] val(S_dAI == sC) &&
+    [instruct_door(dLI, sO)] val(S_dLO == sC) &&
+    [instruct_door(dLO, sO)] val(S_dLI == sC)
+)

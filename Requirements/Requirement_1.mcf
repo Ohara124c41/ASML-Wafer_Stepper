@@ -1,0 +1,22 @@
+% Requirement:
+%
+%	"Any door in the wafer stepper can only open if the pressure on both sides
+%	of the door is equal."
+%
+% Description:
+%
+%	The pressure is kept track of using a variable (e.g. P_cI, P_cL, etc.),
+%	where P_cI is the pressure in the input sluice. The door can only open if
+%	the pressure on both sides is equal.
+
+nu X(P_cI:Pressure = pA, P_cL:Pressure = pL, P_cO:Pressure = pA) . (
+	(forall p:Pressure . [set_pressure(cI, p)] X(p, P_cL, P_cO)) &&
+	(forall p:Pressure . [set_pressure(cL, p)] X(P_cI, p, P_cO)) &&
+	(forall p:Pressure . [set_pressure(cO, p)] X(P_cI, P_cL, p)) &&
+	(forall p:Pressure . [set_pressure(cH, p)] X(P_cI, P_cL, P_cO)) &&
+	[!exists p:Pressure , c:Chamber . set_pressure(c, p)] X(P_cI, P_cL, P_cO) &&
+
+	[instruct_door(dLI, sO)] val(P_cI == P_cL) &&
+	[instruct_door(dLO, sO)] val(P_cO == P_cL) &&
+	[instruct_door(dH , sO)] val(pH == P_cL)
+)

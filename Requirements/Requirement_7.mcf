@@ -1,0 +1,32 @@
+% Requirement:
+%
+%	"When a wafer enters the wafer stepper it must always exit after being
+%	measured and processed."
+%
+% Description:
+%
+%	Variables are used to represent the location of a wafer. The states are
+%	bounded with equalities to ensure that wafer positions cannot be skipped,
+%	wafers cannot travel backward through the system, and wafers cannot be
+%	measured twice. When the number of wafers in is equal to the number of
+%	wafers out after a system_finished action, all wafers that have been fed
+%	to the system will have been guaranteed to exit after projection.
+
+nu X(win:Int = 0, wout:Int = 0, wproj:Int = 0, p1:Int = 0, p2:Int = 0, p3:Int = 0, p4:Int = 0,
+	p5:Int = 0, p6:Int = 0) . (
+	[wafer_in] X(win+1, wout, wproj, p1, p2, p3, p4, p5, p6) &&
+	[wafer_out] X(win, wout+1, wproj, p1, p2, p3, p4, p5, p6) &&
+	[project_wafer] X(win, wout, wproj+1, p1, p2, p3, p4, p5, p6) &&
+	[instruct_robot(rT, cI, aR)] X(win, wout, wproj, p1 + 1, p2, p3, p4, p5, p6) &&
+	[instruct_robot(rI, cI, aG)] X(win, wout, wproj, p1, p2 + 1, p3, p4, p5, p6) &&
+	[instruct_robot(rI, cH, aR)] X(win, wout, wproj, p1, p2, p3 + 1, p4, p5, p6) &&
+	[instruct_robot(rO, cH, aG)] X(win, wout, wproj, p1, p2, p3, p4 + 1, p5, p6) &&
+	[instruct_robot(rO, cO, aR)] X(win, wout, wproj, p1, p2, p3, p4, p5 + 1, p6) &&
+	[instruct_robot(rT, cO, aG)] X(win, wout, wproj, p1, p2, p3, p4, p5, p6 + 1) &&
+	[!exists r:Robot, a:Action . (instruct_robot(r, ra2c(r, a), a) || wafer_in || wafer_out || project_wafer || system_finished)] X(win, wout, wproj, p1, p2, p3, p4, p5, p6) &&
+
+	[system_finished] val(win == wout) &&
+	mu Y . ([!system_finished] Y && <true>true) &&
+	val(win >= p1 && p1 >= p2 && p2 >= p3 && p3 >= wproj && wproj >= p4 && p4 >= p5
+		&& p5 >= p6 && p6 >= wout)
+)

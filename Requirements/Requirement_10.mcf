@@ -1,0 +1,29 @@
+% Requirement:
+%
+%   "Robots cannot be instructed to push a wafer through a closed door."
+%
+% Description:
+%
+%   The requirement can be interpreted as the following:
+%   "Robots can only be instructed to push a wafer through an opened door."
+%   A variable is used to keep track of the DoorStates. The DoorStates are
+%   initialized at closed (sC) in order to prevent an invalid system
+%   initialization sequence. The instruct_robot action is permitted if the
+%   door on the path is open.
+
+nu X(S_dAI:DoorState = sC, S_dAO:DoorState = sC, S_dLI:DoorState = sC, S_dLO:DoorState = sC, S_dH:DoorState = sC) . (
+    (forall ds:DoorState . [instruct_door(dAI, ds)] X(ds, S_dAO, S_dLI, S_dLO, S_dH)) &&
+	(forall ds:DoorState . [instruct_door(dAO, ds)] X(S_dAI, ds, S_dLI, S_dLO, S_dH)) &&
+	(forall ds:DoorState . [instruct_door(dLI, ds)] X(S_dAI, S_dAO, ds, S_dLO, S_dH)) &&
+	(forall ds:DoorState . [instruct_door(dLO, ds)] X(S_dAI, S_dAO, S_dLI, ds, S_dH)) &&
+	(forall ds:DoorState . [instruct_door(dH , ds)] X(S_dAI, S_dAO, S_dLI, S_dLO, ds)) &&
+	[!exists d:Door, ds:DoorState, r:Robot, c:Chamber, a:Action .
+	(instruct_door(d, ds) || instruct_robot(r, c, a))] X(S_dAI, S_dAO, S_dLI, S_dLO, S_dH) &&
+
+	[instruct_robot(rT, cI, aR)] val(S_dAI == sO) &&
+	[instruct_robot(rT, cO, aG)] val(S_dAO == sO) &&
+	[instruct_robot(rI, cI, aG)] val(S_dLI == sO) &&
+	[instruct_robot(rO, cO, aR)] val(S_dLO == sO) &&
+	[instruct_robot(rI, cH, aR)] val(S_dH  == sO) &&
+	[instruct_robot(rO, cH, aG)] val(S_dH  == sO)
+)

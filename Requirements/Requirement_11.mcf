@@ -1,0 +1,11 @@
+% Requirement:
+%
+%  "Eventually the wafer stepper the system must always
+%  indicate that it has finished."
+%
+% Description:
+%
+%   A system_finished action must eventually occur for every system
+%   initialization.
+
+mu X . ([!system_finished] X && <true>true)

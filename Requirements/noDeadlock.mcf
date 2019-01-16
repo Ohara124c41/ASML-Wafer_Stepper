@@ -1,0 +1,3 @@
+%% "After any sequence of actions, another action can be done, i.e., no deadlock can occur."
+
+[true*]<true>true

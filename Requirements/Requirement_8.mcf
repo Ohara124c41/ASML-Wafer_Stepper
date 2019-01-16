@@ -1,0 +1,42 @@
+% Requirement:
+%
+%   "When a door opens, a wafer must go through before the door closes."
+%
+% Description:
+%
+%   The DoorStates are initialized at closed (sC) in order to prevent an
+%   invalid system initialization sequence. Variables are used to keep track of
+%   the state of a door (e.g. S_dAO, S_dAI, etc.). Variables (e.g. bAI, bAO, etc.)
+%   represent that a wafer has transitioned through a particular door. After the
+%   DoorState has changed, the system updates the value of the state and resets
+%   the variable related to the Boolean.
+
+nu X(S_dAI:DoorState = sC, S_dAO:DoorState = sC, S_dLI:DoorState = sC, S_dLO:DoorState = sC,
+   S_dH:DoorState = sC, bAI:Bool = false, bLI:Bool = false, bH:Bool = false, bLO:Bool = false,
+   bAO:Bool = false) . (
+   (forall ds:DoorState . [instruct_door(dAI, ds)]
+  	 X(ds, S_dAO, S_dLI, S_dLO, S_dH, false, bLI, bH, bLO, bAO )) &&
+   (forall ds:DoorState . [instruct_door(dAO, ds)]
+     X(S_dAI, ds, S_dLI, S_dLO, S_dH, bAI, bLI, bH, bLO, false )) &&
+   (forall ds:DoorState . [instruct_door(dLI, ds)]
+     X(S_dAI, S_dAO, ds, S_dLO, S_dH, bAI, false, bH, bLO, bAO )) &&
+   (forall ds:DoorState . [instruct_door(dLO, ds)]
+     X(S_dAI, S_dAO, S_dLI, ds, S_dH, bAI, bLI, bH, false, bAO )) &&
+   (forall ds:DoorState . [instruct_door(dH , ds)]
+     X(S_dAI, S_dAO, S_dLI, S_dLO, ds, bAI, bLI, false, bLO, bAO)) &&
+   [!exists d:Door, ds:DoorState, r:Robot, c:Chamber, a:Action . (instruct_door(d, ds) ||
+     instruct_robot(r, c, a))] X(S_dAI, S_dAO, S_dLI, S_dLO, S_dH, bAI, bLI, bH, bLO, bAO) &&
+
+   [instruct_robot(rT, cI, aR)] X(S_dAI, S_dAO, S_dLI, S_dLO, S_dH, true, bLI,  bH,   bLO,  bAO) &&
+   [instruct_robot(rT, cO, aG)] X(S_dAI, S_dAO, S_dLI, S_dLO, S_dH, bAI,  bLI,  bH,   bLO,  true) &&
+   [instruct_robot(rI, cI, aG)] X(S_dAI, S_dAO, S_dLI, S_dLO, S_dH, bAI,  true, bH,   bLO,  bAO) &&
+   [instruct_robot(rO, cO, aR)] X(S_dAI, S_dAO, S_dLI, S_dLO, S_dH, bAI,  bLI,  bH,   true, bAO) &&
+   [instruct_robot(rI, cH, aR)] X(S_dAI, S_dAO, S_dLI, S_dLO, S_dH, bAI,  bLI,  true, bLO,  bAO) &&
+   [instruct_robot(rO, cH, aG)] X(S_dAI, S_dAO, S_dLI, S_dLO, S_dH, bAI,  bLI,  true, bLO,  bAO) &&
+
+   [instruct_door(dAI, sC)] val(bAI == true || S_dAI != sO) &&
+   [instruct_door(dAO, sC)] val(bAO == true || S_dAO != sO) &&
+   [instruct_door(dLI, sC)] val(bLI == true || S_dLI != sO) &&
+   [instruct_door(dLO, sC)] val(bLO == true || S_dLO != sO) &&
+   [instruct_door(dH , sC)] val(bH  == true || S_dH  != sO)
+)

@@ -1,0 +1,61 @@
+pbes2bool parameters:
+  input file:            architecture.pbes
+  data rewriter:         jitty
+  substitution strategy: 0
+  search strategy:       breadth-first
+  solution strategy      lf
+  erase level:           none
+Loading PBES in pbes format...
+
+Processed 1 and generated 7 boolean variables.
+
+Processed 63 and generated 95 boolean variables.
+
+Processed 124 and generated 148 boolean variables.
+
+Processed 183 and generated 199 boolean variables.
+
+Processed 252 and generated 271 boolean variables.
+
+Processed 319 and generated 349 boolean variables.
+
+Processed 377 and generated 394 boolean variables.
+
+Processed 430 and generated 446 boolean variables.
+
+Processed 481 and generated 492 boolean variables.
+
+Generated 496 BES equations in total, generating BES
+
+Solving a BES with 496 equations using the local fixed point algorithm.
+
+Solving equations of rank 0.
+The solution for the initial variable of the pbes is false
+
+false
+
+0: Y(sC,sC,sC,sC,sC,false,false,false,false,false,  1,1,dAI,1,1,1,sO,sO,sC,1,sO,sO,sC,1,sO,sO,sC,1,sO,sO,sC,1,sO,sO,sC,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cI,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cO,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cL,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cH,1,1,1,1,1,1,aG,cI,aR,1,aG,cI,aR,1,aG,cI,aR)
+6: Y(sC,sC,sC,sC,sC,false,false,false,false,false,  0,1,dAI,1,18,1,sO,sO,sC,1,sO,sO,sC,1,sO,sO,sC,1,sO,sO,sC,1,sO,sO,sC,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cI,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cO,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cL,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cH,1,1,1,1,1,1,aG,cI,aR,1,aG,cI,aR,1,aG,cI,aR)
+22: Y(sC,sC,sC,sC,sC,false,false,false,false,false,  0,1,dAI,1,17,1,sO,sO,sC,1,sO,sO,sC,1,sO,sO,sC,1,sO,sO,sC,1,sO,sO,sC,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cI,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cO,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cL,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cH,1,1,1,1,1,41,aR,cI,aG,1,aG,cI,aR,1,aG,cI,aR)
+48: Y(sC,sC,sC,sC,sC,false,false,false,false,false,  0,1,dAI,1,17,1,sO,sO,sC,1,sO,sO,sC,1,sO,sO,sC,1,sO,sO,sC,1,sO,sO,sC,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cI,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cO,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cL,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cH,2,1,1,1,1,6,aR,cI,aG,1,aG,cI,aR,1,aG,cI,aR)
+79: Y(sC,sC,sC,sC,sC,false,false,false,false,false,  0,1,dAI,1,17,39,sO,sO,sC,1,sO,sO,sC,1,sO,sO,sC,1,sO,sO,sC,1,sO,sO,sC,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cI,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cO,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cL,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cH,2,1,1,1,1,5,aR,cI,aG,1,aG,cI,aR,1,aG,cI,aR)
+110: Y(sC,sC,sC,sC,sC,false,false,false,false,false,  0,1,dAI,1,17,38,sO,sO,sO,1,sO,sO,sC,1,sO,sO,sC,1,sO,sO,sC,1,sO,sO,sC,100,pA,pA,pA,pA,pA,pA,pA,pA,pA,cI,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cO,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cL,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cH,2,1,1,1,1,5,aR,cI,aG,1,aG,cI,aR,1,aG,cI,aR)
+137: Y(sC,sC,sC,sC,sC,false,false,false,false,false,  0,1,dAI,1,17,46,sO,sO,sO,1,sO,sO,sC,1,sO,sO,sC,1,sO,sO,sC,1,sO,sO,sC,81,pA,pA,pA,pA,pA,pA,pA,pA,pA,cI,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cO,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cL,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cH,2,1,1,1,1,5,aR,cI,aG,1,aG,cI,aR,1,aG,cI,aR)
+158: Y(sC,sC,sC,sC,sC,false,false,false,false,false,  0,1,dAI,1,17,46,sO,sO,sO,1,sO,sO,sC,1,sO,sO,sC,1,sO,sO,sC,1,sO,sO,sC,80,pA,pA,pA,pA,pA,pA,pA,pA,pA,cI,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cO,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cL,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cH,2,1,1,1,1,5,aR,cI,aG,1,aG,cI,aR,1,aG,cI,aR)
+175: Y(sC,sC,sC,sC,sC,false,false,false,false,false,  0,1,dAI,1,17,7,sO,sO,sO,1,sO,sO,sC,1,sO,sO,sC,1,sO,sO,sC,1,sO,sO,sC,89,pA,pA,pA,pA,pA,pA,pA,pA,pA,cI,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cO,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cL,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cH,2,1,1,1,1,5,aR,cI,aG,1,aG,cI,aR,1,aG,cI,aR)
+191: Y(sO,sC,sC,sC,sC,false,false,false,false,false,  0,1,dAI,1,17,6,sO,sO,sO,1,sO,sO,sC,1,sO,sO,sC,1,sO,sO,sC,1,sO,sO,sC,89,pA,pA,pA,pA,pA,pA,pA,pA,pA,cI,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cO,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cL,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cH,2,1,1,1,1,5,aR,cI,aG,1,aG,cI,aR,1,aG,cI,aR)
+207: Y(sO,sC,sC,sC,sC,false,false,false,false,false,  0,1,dAI,1,17,5,sO,sO,sO,1,sO,sO,sC,1,sO,sO,sC,1,sO,sO,sC,1,sO,sO,sC,89,pA,pA,pA,pA,pA,pA,pA,pA,pA,cI,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cO,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cL,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cH,2,1,1,1,1,4,aR,cI,aG,1,aG,cI,aR,1,aG,cI,aR)
+223: Y(sO,sC,sC,sC,sC,true,false,false,false,false,  0,1,dAI,1,17,5,sO,sO,sO,1,sO,sO,sC,1,sO,sO,sC,1,sO,sO,sC,1,sO,sO,sC,89,pA,pA,pA,pA,pA,pA,pA,pA,pA,cI,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cO,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cL,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cH,2,1,1,1,1,3,aR,cI,aG,1,aG,cI,aR,1,aG,cI,aR)
+239: Y(sO,sC,sC,sC,sC,true,false,false,false,false,  0,1,dAI,1,16,5,sO,sO,sO,1,sO,sO,sC,1,sO,sO,sC,1,sO,sO,sC,1,sO,sO,sC,89,pA,pA,pA,pA,pA,pA,pA,pA,pA,cI,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cO,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cL,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cH,2,1,1,1,1,2,aR,cI,aG,1,aG,cI,aR,1,aG,cI,aR)
+255: Y(sO,sC,sC,sC,sC,true,false,false,false,false,  0,1,dAI,1,15,5,sO,sO,sO,1,sO,sO,sC,1,sO,sO,sC,1,sO,sO,sC,1,sO,sO,sC,89,pA,pA,pA,pA,pA,pA,pA,pA,pA,cI,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cO,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cL,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cH,2,1,1,1,1,2,aR,cI,aG,40,aG,cI,aG,1,aG,cI,aR)
+277: Y(sO,sC,sC,sC,sC,true,false,false,false,false,  0,1,dAI,1,15,5,sO,sO,sO,1,sO,sO,sC,1,sO,sO,sC,1,sO,sO,sC,1,sO,sO,sC,89,pA,pA,pA,pA,pA,pA,pA,pA,pA,cI,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cO,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cL,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cH,2,2,1,1,1,2,aR,cI,aG,12,aG,cI,aG,1,aG,cI,aR)
+304: Y(sO,sC,sC,sC,sC,true,false,false,false,false,  0,1,dAI,1,15,5,sO,sO,sO,1,sO,sO,sC,39,sO,sO,sC,1,sO,sO,sC,1,sO,sO,sC,89,pA,pA,pA,pA,pA,pA,pA,pA,pA,cI,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cO,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cL,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cH,2,2,1,1,1,2,aR,cI,aG,11,aG,cI,aG,1,aG,cI,aR)
+334: Y(sO,sC,sC,sC,sC,true,false,false,false,false,  0,1,dAI,1,15,5,sO,sO,sO,1,sO,sO,sC,37,sO,sO,sO,1,sO,sO,sC,1,sO,sO,sC,89,pA,pA,pA,pA,pA,pA,pA,pA,pA,cI,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cO,100,pA,pA,pA,pA,pL,pA,pA,pA,pA,cL,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cH,2,2,1,1,1,2,aR,cI,aG,11,aG,cI,aG,1,aG,cI,aR)
+361: Y(sO,sC,sC,sC,sC,true,false,false,false,false,  0,1,dAI,1,15,5,sO,sO,sO,1,sO,sO,sC,154,sO,sO,sO,1,sO,sO,sC,1,sO,sO,sC,89,pA,pA,pA,pA,pA,pA,pA,pA,pA,cI,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cO,81,pA,pA,pA,pA,pL,pA,pA,pA,pA,cL,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cH,2,2,1,1,1,2,aR,cI,aG,11,aG,cI,aG,1,aG,cI,aR)
+382: Y(sO,sC,sC,sC,sC,true,false,false,false,false,  0,1,dAI,1,15,5,sO,sO,sO,1,sO,sO,sC,154,sO,sO,sO,1,sO,sO,sC,1,sO,sO,sC,89,pA,pA,pA,pA,pA,pA,pA,pA,pA,cI,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cO,80,pA,pA,pA,pA,pL,pA,pA,pA,pA,cL,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cH,2,2,1,1,1,2,aR,cI,aG,11,aG,cI,aG,1,aG,cI,aR)
+399: Y(sO,sC,sC,sC,sC,true,false,false,false,false,  0,1,dAI,1,15,5,sO,sO,sO,1,sO,sO,sC,150,sO,sO,sO,1,sO,sO,sC,1,sO,sO,sC,89,pA,pA,pA,pA,pA,pA,pA,pA,pA,cI,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cO,89,pA,pA,pA,pA,pL,pA,pA,pA,pA,cL,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cH,2,2,1,1,1,2,aR,cI,aG,11,aG,cI,aG,1,aG,cI,aR)
+415: Y(sO,sC,sC,sC,sC,true,false,false,false,false,  0,1,dAI,1,15,5,sO,sO,sO,1,sO,sO,sC,48,sO,sO,sO,1,sO,sO,sC,1,sO,sO,sC,87,pA,pA,pL,pA,pA,pA,pA,pA,pA,cI,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cO,89,pA,pA,pA,pA,pL,pA,pA,pA,pA,cL,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cH,2,2,1,1,1,2,aR,cI,aG,11,aG,cI,aG,1,aG,cI,aR)
+431: Y(sO,sC,sC,sC,sC,true,false,false,false,false,  0,1,dAI,1,15,5,sO,sO,sO,1,sO,sO,sC,148,sO,sO,sO,1,sO,sO,sC,1,sO,sO,sC,44,pA,pA,pL,pA,pA,pA,pA,pA,pA,cI,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cO,89,pA,pA,pA,pA,pL,pA,pA,pA,pA,cL,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cH,2,2,1,1,1,2,aR,cI,aG,11,aG,cI,aG,1,aG,cI,aR)
+447: Y(sO,sC,sC,sC,sC,true,false,false,false,false,  0,1,dAI,1,15,5,sO,sO,sO,1,sO,sO,sC,147,sO,sO,sO,1,sO,sO,sC,1,sO,sO,sC,43,pA,pA,pL,pA,pA,pA,pA,pA,pA,cI,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cO,89,pA,pA,pA,pA,pL,pA,pA,pA,pA,cL,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cH,2,2,1,1,1,2,aR,cI,aG,11,aG,cI,aG,1,aG,cI,aR)
+463: Y(sO,sC,sC,sC,sC,true,false,false,false,false,  0,1,dAI,1,15,5,sO,sO,sO,1,sO,sO,sC,146,sO,sO,sO,1,sO,sO,sC,1,sO,sO,sC,43,pA,pA,pL,pA,pA,pA,pA,pA,pA,cI,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cO,89,pA,pA,pA,pA,pL,pA,pA,pA,pA,cL,6,pA,pA,pA,pA,pA,pA,pA,pA,pA,cH,2,2,1,1,1,2,aR,cI,aG,11,aG,cI,aG,1,aG,cI,aR)
+                        False

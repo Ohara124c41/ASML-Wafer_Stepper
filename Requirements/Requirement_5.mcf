@@ -1,0 +1,22 @@
+% Requirement:
+%
+%	"There can be only two wafers at a time in the low-vacuum chamber."
+%
+% Description:
+%
+%	Robot actions alternate such that they can only hold a single wafer at a
+%	time. The number of wafers is kept track of with an integer that is
+%	incremented when a robot is holding (aG) a wafer and decremented when
+%	it relinquishes a wafer (aR).
+
+(nu X (n:Int = 0) . (
+	[instruct_robot(rI, cI, aG)] (val(n<1) && X(n+1)) &&
+	[instruct_robot(rI, cH, aR)] (val(n>0) && X(n-1)) &&
+	[!(instruct_robot(rI, cI, aG) || instruct_robot(rI, cH, aR))] X(n)
+)) &&
+
+(nu X (n:Int = 0) . (
+	[instruct_robot(rO, cH, aG)] (val(n<1) && X(n+1)) &&
+	[instruct_robot(rO, cO, aR)] (val(n>0) && X(n-1)) &&
+	[!(instruct_robot(rO, cO, aR) || instruct_robot(rO, cH, aG))] X(n)
+))
